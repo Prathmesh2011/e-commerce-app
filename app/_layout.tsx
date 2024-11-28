@@ -1,6 +1,8 @@
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
+import { Provider } from 'react-redux';
+import { store } from '@/redux/store';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
 
@@ -23,10 +25,12 @@ export default function RootLayout() {
   }
 
   return (
+    <Provider store={store}>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="signin" options={{ presentation: 'modal' }} />
         <Stack.Screen name="signup" options={{ presentation: 'modal' }} />
       </Stack>
+    </Provider>
   );
 }

@@ -18,3 +18,13 @@ export interface CategoryType {
   name: string;
   image: string;
 }
+
+export interface CartItemType {
+  id: number;            
+  title: string;         
+  price: number;         
+  description: string;   
+  images: string[];      
+  category: Category;    
+  quantity: number;      
+}
