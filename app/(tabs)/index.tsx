@@ -9,6 +9,7 @@ import ProductList from '@/components/ProductList';
 import { Stack } from 'expo-router';
 import Header from '@/components/Header';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import FlashSale from '@/components/FlashSale';
 
 
 const app = initializeApp(firebaseConfig);
@@ -81,6 +82,7 @@ const HomeScreen = () => {
       ) : (
         <>
           <Categories categories={categories} />
+          <FlashSale/>
           <ProductList products={products} />
         </>
       )}

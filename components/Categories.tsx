@@ -14,6 +14,7 @@ const Colors = {
 const Categories = ({ categories }: Props) => {
   return (
     <View>
+      <View style ={styles.container}></View>
       <View style={styles.titleWrapper}>
         <Text style={styles.title}>Categories</Text>
         <TouchableOpacity>
@@ -41,10 +42,12 @@ const Categories = ({ categories }: Props) => {
 export default Categories;
 
 const styles = StyleSheet.create({
+  container: {
+    marginBottom: 20
+  },
   titleWrapper: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 10,
     marginHorizontal: 20,
   },
   title: {
