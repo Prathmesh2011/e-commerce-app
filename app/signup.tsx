@@ -1,9 +1,10 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import { Link, useRouter, Stack } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '@/firebaseConfig';
 import InputField from '@/components/InputField';
-import SocialLoginButtons from '@/components/SocialLoginButtons';
 
 const Colors = {
   black: '#000000',
@@ -15,6 +16,32 @@ const Colors = {
 
 const SignUpScreen = () => {
   const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleSignUp = async () => {
+    if (!email || !password || !confirmPassword) {
+      Alert.alert('Error', 'Please fill out all fields');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      Alert.alert('Error', 'Passwords do not match');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      router.replace('/(tabs)'); // Navigate to the home page
+    } catch (error: any) {
+      Alert.alert('Sign-Up Failed', error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -29,26 +56,32 @@ const SignUpScreen = () => {
         }}
       />
       <View style={styles.container}>
-        <Text style={styles.title}>Create an Account</Text>
+        <Text style={styles.title}>Create a New Account</Text>
         <InputField
           placeholder="Email Address"
           placeholderTextColor={Colors.gray}
           autoCapitalize="none"
           keyboardType="email-address"
+          value={email}
+          onChangeText={setEmail}
         />
         <InputField
           placeholder="Password"
           placeholderTextColor={Colors.gray}
           secureTextEntry={true}
+          value={password}
+          onChangeText={setPassword}
         />
         <InputField
           placeholder="Confirm Password"
           placeholderTextColor={Colors.gray}
           secureTextEntry={true}
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
         />
 
-        <TouchableOpacity style={styles.btn}>
-          <Text style={styles.btnTxt}>Create an Account</Text>
+        <TouchableOpacity style={styles.btn} onPress={handleSignUp} disabled={loading}>
+          <Text style={styles.btnTxt}>{loading ? 'Signing Up...' : 'Sign Up'}</Text>
         </TouchableOpacity>
 
         <Text style={styles.loginTxt}>
@@ -59,10 +92,6 @@ const SignUpScreen = () => {
             </TouchableOpacity>
           </Link>
         </Text>
-
-        <View style={styles.divider} />
-
-        <SocialLoginButtons emailHref="/signin" />
       </View>
     </>
   );
@@ -88,12 +117,13 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     borderRadius: 5,
     marginBottom: 20,
+    width: '100%',
+    alignItems: 'center',
   },
   btnTxt: {
     color: Colors.white,
     fontSize: 16,
     fontWeight: '600',
-    textAlign: 'center',
   },
   loginTxt: {
     fontSize: 14,
@@ -103,12 +133,6 @@ const styles = StyleSheet.create({
   loginTxtSpan: {
     color: Colors.primary,
     fontWeight: '600',
-  },
-  divider: {
-    borderTopColor: Colors.gray,
-    borderTopWidth: StyleSheet.hairlineWidth,
-    width: '30%',
-    marginBottom: 30,
   },
 });
 

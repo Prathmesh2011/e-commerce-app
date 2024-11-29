@@ -26,12 +26,14 @@ const SocialLoginButtons = ({ emailHref }: Props) => {
           </TouchableOpacity>
         </Link>
       </Animated.View>
+
       <Animated.View entering={FadeInDown.delay(700).duration(500)}>
         <TouchableOpacity style={styles.button}>
           <Ionicons name="logo-google" size={20} color={Colors.black} />
           <Text style={styles.btnTxt}>Continue with Google</Text>
         </TouchableOpacity>
       </Animated.View>
+      
       <Animated.View entering={FadeInDown.delay(1100).duration(500)}>
         <TouchableOpacity style={styles.button}>
           <Ionicons name="logo-apple" size={20} color={Colors.black} />

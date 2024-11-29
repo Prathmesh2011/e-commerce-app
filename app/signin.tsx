@@ -1,7 +1,9 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import { Link, useRouter, Stack } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '@/firebaseConfig';
 import InputField from '@/components/InputField';
 import SocialLoginButtons from '@/components/SocialLoginButtons';
 
@@ -15,6 +17,26 @@ const Colors = {
 
 const SignInScreen = () => {
   const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleSignIn = async () => {
+    if (!email || !password) {
+      Alert.alert('Error', 'Please enter both email and password');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      router.replace('/(tabs)'); // Navigate to the home page
+    } catch (error: any) {
+      Alert.alert('Sign-In Failed', error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -35,20 +57,19 @@ const SignInScreen = () => {
           placeholderTextColor={Colors.gray}
           autoCapitalize="none"
           keyboardType="email-address"
+          value={email}
+          onChangeText={setEmail}
         />
         <InputField
           placeholder="Password"
           placeholderTextColor={Colors.gray}
           secureTextEntry={true}
+          value={password}
+          onChangeText={setPassword}
         />
 
-        <TouchableOpacity
-          style={styles.btn}
-          onPress={() => {
-            router.replace('/(tabs)');
-          }}
-        >
-          <Text style={styles.btnTxt}>Login</Text>
+        <TouchableOpacity style={styles.btn} onPress={handleSignIn} disabled={loading}>
+          <Text style={styles.btnTxt}>{loading ? 'Signing In...' : 'Login'}</Text>
         </TouchableOpacity>
 
         <Text style={styles.loginTxt}>
@@ -88,12 +109,13 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     borderRadius: 5,
     marginBottom: 20,
+    width: '100%',
+    alignItems: 'center',
   },
   btnTxt: {
     color: Colors.white,
     fontSize: 16,
     fontWeight: '600',
-    textAlign: 'center',
   },
   loginTxt: {
     fontSize: 14,
