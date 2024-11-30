@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'stretch',
     padding: 20,
     backgroundColor: Colors.background,
   },
@@ -133,6 +133,8 @@ const styles = StyleSheet.create({
   loginTxtSpan: {
     color: Colors.primary,
     fontWeight: '600',
+    marginBottom:-7
+    
   },
 });
 
