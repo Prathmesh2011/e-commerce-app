@@ -12,7 +12,7 @@ const ProfileScreen = () => {
           style={styles.profileImage}
         />
         <View style={styles.profileInfo}>
-          <Text style={styles.name}>Cameron Williamson</Text>
+          <Text style={styles.name}>Username</Text>
           <Text style={styles.balance}>$ 1,000,000</Text>
         </View>
         <TouchableOpacity style={styles.settingsIcon}>
